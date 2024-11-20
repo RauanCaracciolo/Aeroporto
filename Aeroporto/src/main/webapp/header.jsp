@@ -47,7 +47,7 @@
 		    
 		  </div>
 		  <% 
-		   out.println("<a href=\"DeslogarServlet\"><button type=\"button\" class=\"btn btn-primary\">Deslogar</button></a>");
+		   out.println("<a href=\"Adm?action=deslogar\"><button type=\"button\" class=\"btn btn-primary\">Deslogar</button></a>");
 		      } %>
 		  <a class="nav-link" href="login.jsp"><button type="button" class="btn btn-primary">Login</button></a>
 		</nav>

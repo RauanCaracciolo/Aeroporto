@@ -9,14 +9,14 @@
 <title>Login</title>
 </head>
 <body>
-	<form action="LoginServlet" method="post">
+	<form action="Adm?action=login" method="post">
 	  <div class="form-group">
 	    <label for="username">Usuario</label>
-	    <input class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email" name="username">
+	    <input class="form-control" id="username" aria-describedby="emailHelp" name="username">
 	  </div>
 	  <div class="form-group">
 	    <label for="senha">Senha</label>
-	    <input  class="form-control" id="senha" placeholder="Password" name="senha">
+	    <input  class="form-control" id="senha" name="senha">
 	  </div>
 	  <button type="submit" class="btn btn-primary">Login</button>
 	</form>
