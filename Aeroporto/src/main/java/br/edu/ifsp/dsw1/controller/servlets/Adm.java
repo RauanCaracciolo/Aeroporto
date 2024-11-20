@@ -125,7 +125,6 @@ public class Adm extends HttpServlet implements FlightDataObserver {
 
         for (FlightData flight : flights) {
             if (flight.getState().getClass().getSimpleName().equalsIgnoreCase(state)) {
-            	System.out.println(flight.getState().getClass().getSimpleName());
                 filtered.add(flight);
             }
         }

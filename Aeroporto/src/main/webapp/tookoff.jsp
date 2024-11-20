@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Embarque</title>
+<title>Hall 2</title>
 </head>
 <body>
 	<table class="table table-dark table-bordered">
@@ -19,7 +19,7 @@
         <th scope="col">Status</th>
     </tr>
     </thead>
-	
+
     <tbody>
     <%
         List<FlightData> lista = (List<FlightData>) request.getAttribute("flights");
@@ -41,8 +41,8 @@
     <td colspan="5">Nenhum Voo encontrado</td>
     <%} %>
     </tbody>
-</table>
-	<a href="Adm?action=listBoarding"><button>Atualiza</button></a>
-
+    </table>
+    <a href="Adm?action=listTookOff"><button>Atualiza</button></a>
+    
 </body>
 </html>

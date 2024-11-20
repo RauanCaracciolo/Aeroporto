@@ -10,7 +10,6 @@
 <title>Desmbarque</title>
 </head>
 <body>
-	<a href="Adm?action=listArriving"><button>Atualiza</button></a>
 	<table class="table table-dark table-bordered">
     <thead>
     <tr>
@@ -43,7 +42,8 @@
     <%} %>
 
     </tbody>
-
 </table>
+	<a href="Adm?action=listArriving"><button>Atualiza</button></a>
+
 </body>
 </html>
