@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>    
 <html>
 <head>
@@ -20,16 +21,16 @@
 		        <a class="nav-link" href="index.jsp">Home <span class="sr-only">(current)</span></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="embarque.jsp">Embarque</a>
+		        <a class="nav-link" href="boarding.jsp">Embarque</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="desembarque.jsp">Desembarque</a>
+		        <a class="nav-link" href="arriving.jsp">Desembarque</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="hall_1.jsp">Hall 1</a>
+		        <a class="nav-link" href="takingoff.jsp">Hall 1</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="hall_2.jsp">Hall 2</a>
+		        <a class="nav-link" href="tookoff.jsp">Hall 2</a>
 		      </li>
 		    <% 
 		      HttpSession sessao = request.getSession(false);
@@ -44,10 +45,9 @@
 		      	out.println("</li>");
 		      %>
 		    </ul>
-		    
 		  </div>
 		  <% 
-		   out.println("<a href=\"Adm?action=deslogar\"><button type=\"button\" class=\"btn btn-primary\">Deslogar</button></a>");
+		   out.println("<a href=\"Adm?action=logout\"><button type=\"button\" class=\"btn btn-primary\">Deslogar</button></a>");
 		      } %>
 		  <a class="nav-link" href="login.jsp"><button type="button" class="btn btn-primary">Login</button></a>
 		</nav>

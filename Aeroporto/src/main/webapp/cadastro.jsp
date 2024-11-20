@@ -21,6 +21,15 @@
 	    <label for="time">Horario</label>
 	    <input  class="form-control" id="time" name="time">
 	  </div>
+	  <div class="form-group">
+	    <label for="state">Horario</label>
+	    <select class="form-control" id="state" name ="state" >
+  			<option>Arriving</option>
+  			<option>Boarding</option>
+  			<option>TakingOff</option>
+  			<option>TookOff</option>
+		</select>
+	  </div>
 	  <button type="submit" class="btn btn-primary">Cadastrar</button>
 	</form>
 </body>
