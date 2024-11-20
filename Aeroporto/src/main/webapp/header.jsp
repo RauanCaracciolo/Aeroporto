@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>    
 <html>
 <head>
 <meta charset="UTF-8">
@@ -29,9 +31,25 @@
 		      <li class="nav-item">
 		        <a class="nav-link" href="hall_2.jsp">Hall 2</a>
 		      </li>
+		    <% 
+		      HttpSession sessao = request.getSession(false);
+		      if(sessao == null || sessao.getAttribute("Usuario") == null){
+		      
+		      }else{
+		      	out.println("<li class=\"nav-item\">");
+		      	out.println("<a class= \"nav-link\" href= \"cadastro.jsp\">Cadastro</a>");
+		      	out.println("</li>");
+		      	out.println("<li class=\"nav-item\">");
+		      	out.println("<a class= \"nav-link\" href= \"atualizar.jsp\">Atualizar</a>");
+		      	out.println("</li>");
+		      %>
 		    </ul>
-		    <a class="nav-link" href="login.jsp"><button type="button" class="btn btn-primary">Login</button></a>
+		    
 		  </div>
+		  <% 
+		   out.println("<a href=\"DeslogarServlet\"><button type=\"button\" class=\"btn btn-primary\">Deslogar</button></a>");
+		      } %>
+		  <a class="nav-link" href="login.jsp"><button type="button" class="btn btn-primary">Login</button></a>
 		</nav>
     </header>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
