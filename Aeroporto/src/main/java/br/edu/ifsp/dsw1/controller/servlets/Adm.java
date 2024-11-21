@@ -27,7 +27,7 @@ public class Adm extends HttpServlet implements FlightDataObserver {
     public void init() throws ServletException {
         super.init();
         flightCollection.register(this);
-        // Inicializa as listas no contexto
+        // Inicializa as listas que servirão para filtrar os voos por estado
         getServletContext().setAttribute("arrivingFlights", new ArrayList<>());
         getServletContext().setAttribute("boardingFlights", new ArrayList<>());
         getServletContext().setAttribute("takingOffFlights", new ArrayList<>());
@@ -55,6 +55,7 @@ public class Adm extends HttpServlet implements FlightDataObserver {
         String redirectPage = "index.jsp";
 
         switch (action) {
+        	// Checa se as informações colocadas foram corretas, se sim cria uma sessao e permite ao usuario cadastrar e atualizar, senao joga para a pagina de erro
             case "login":
                 if (ADMIN_USER.equals(request.getParameter("username")) && ADMIN_PASS.equals(request.getParameter("senha"))) {
                     HttpSession session = request.getSession();
@@ -67,88 +68,92 @@ public class Adm extends HttpServlet implements FlightDataObserver {
                 break;
 
             case "logout":
+            	// Invalida a sessao, tirando os poderes de ADMIN do usuario
                 HttpSession session = request.getSession(false);
                 session.invalidate();
                 break;
 
             case "cadastro":
+            	//Cadastra um novo voo com uma funçao propria
                 FlightData flight = createFlightFromRequest(request);
-                System.out.println(flight);
                 flightCollection.insertFlight(flight);
                 redirectPage = "cadastro.jsp";
                 break;
 
             case "update":
+            	//Atualiza o voo identificado pelo numero enviado na requisicao, tambem atualiza a pagina com os voos atualizados
                 flightCollection.updateFlight(Long.parseLong(request.getParameter("flightnumber")));
+                request.setAttribute("flights", flightCollection.getAllFligthts());
+            	request.getRequestDispatcher("atualizar.jsp").forward(request, response);
                 redirectPage = "atualizar.jsp";
                 break;
 
+            case "listAll":
+            	//Lista todos os voos
+            	request.setAttribute("flights", flightCollection.getAllFligthts());
+            	request.getRequestDispatcher("atualizar.jsp").forward(request, response);
+            	break;
             case "listArriving":
+            	//Busca no contexto a lista de voos no estado "Arriving"
+                 List<FlightData> arrivingFlights = (List<FlightData>) getServletContext().getAttribute("arrivingFlights");
+            	 request.setAttribute("flights", arrivingFlights);
+                 request.getRequestDispatcher("arriving.jsp").forward(request, response);
+                 break;
             case "listBoarding":
-            case "listTakingOff":
+            	//Busca no contexto a lista de voos no estado "Boarding"
+            	 List<FlightData> boardingFlights = (List<FlightData>) getServletContext().getAttribute("boardingFlights");
+            	 request.setAttribute("flights", boardingFlights);
+            	 request.getRequestDispatcher("boarding.jsp").forward(request, response);
+            	 break;
+            case "listTakingOff":                  
+            	//Busca no contexto a lista de voos no estado "TakingOff"
+            	 List<FlightData> takingOffFlights = (List<FlightData>) getServletContext().getAttribute("takingOffFlights");
+            	 request.setAttribute("flights", takingOffFlights);
+            	 request.getRequestDispatcher("takingoff.jsp").forward(request, response);
+            	 break;
             case "listTookOff":
-                String state = action.replace("list", "");
-                List<FlightData> filteredFlights = filterFlightsByState(state);
-                request.setAttribute("flights", filteredFlights);
-                request.getRequestDispatcher(state.toLowerCase() + ".jsp").forward(request, response);
-                return;
+            	//Busca no contexto a lista de voos no estado "TookOff"
+            	 List<FlightData> tookOffFlights = (List<FlightData>) getServletContext().getAttribute("tookOffFlights");
+            	 request.setAttribute("flights", tookOffFlights);
+            	 request.getRequestDispatcher("tookoff.jsp").forward(request, response);
+            	break;
 
             default:
                 break;
         }
-
+        //redireciona para a pagina devida
         response.sendRedirect(redirectPage);
     }
 
     private FlightData createFlightFromRequest(HttpServletRequest request) {
+    	//Pega as informaçoes do formulario
         Long number = Long.parseLong(request.getParameter("flightnumber"));
         String company = request.getParameter("company");
         String time = request.getParameter("time");
-        String state = request.getParameter("state");
-
-        State flightState = switch (state) {
-            case "Arriving" -> Arriving.getIntance();
-            case "Boarding" -> Boarding.getIntance();
-            case "TakingOff" -> TakingOff.getIntance();
-            case "TookOff" -> TookOff.getIntance();
-            default -> throw new IllegalArgumentException("Invalid flight state");
-        };
-
+        //Cria um voo com as informaçoes
         FlightData flight = new FlightData(number, company, time);
-        flight.setState(flightState);
+        //Por padrao, seta o estado como Arriving
+        flight.setState(Arriving.getIntance());
         return flight;
     }
-
-    private List<FlightData> filterFlightsByState(String state) {
-        List<FlightData> flights = flightCollection.getAllFligthts();
-        List<FlightData> filtered = new ArrayList<>();
-
-        for (FlightData flight : flights) {
-            if (flight.getState().getClass().getSimpleName().equalsIgnoreCase(state)) {
-                filtered.add(flight);
-            }
-        }
-        return filtered;
-    }
-
     @Override
     public void update(FlightData flight) {
-        // Verificar o estado atual do voo
+        // Verifica o estado atual do voo
         String state = flight.getState().getClass().getSimpleName();
 
-        // Recuperar as listas do contexto
+        // Recupera as listas do contexto
         List<FlightData> arrivingFlights = (List<FlightData>) getServletContext().getAttribute("arrivingFlights");
         List<FlightData> boardingFlights = (List<FlightData>) getServletContext().getAttribute("boardingFlights");
         List<FlightData> takingOffFlights = (List<FlightData>) getServletContext().getAttribute("takingOffFlights");
         List<FlightData> tookOffFlights = (List<FlightData>) getServletContext().getAttribute("tookOffFlights");
 
-        // Remover o voo de todas as listas
+        // Remove o voo de todas as listas
         arrivingFlights.remove(flight);
         boardingFlights.remove(flight);
         takingOffFlights.remove(flight);
         tookOffFlights.remove(flight);
 
-        // Adicionar o voo à lista correta
+        // Adiciona o voo a lista correta
         switch (state) {
             case "Arriving" -> arrivingFlights.add(flight);
             case "Boarding" -> boardingFlights.add(flight);
@@ -156,7 +161,7 @@ public class Adm extends HttpServlet implements FlightDataObserver {
             case "TookOff" -> tookOffFlights.add(flight);
         }
 
-        // Atualizar o contexto
+        // Atualiza o contexto com a lista nova
         getServletContext().setAttribute("arrivingFlights", arrivingFlights);
         getServletContext().setAttribute("boardingFlights", boardingFlights);
         getServletContext().setAttribute("takingOffFlights", takingOffFlights);
